@@ -3,7 +3,10 @@ from  mensa.items import Hauptgericht, Beilage
 class MensaSpider(scrapy.Spider):
     name = "mensa"
     allowed_domains = ["stw-on.de"]
-    start_urls = ["http://www.stw-on.de/braunschweig/essen/menus/mensa-1"]
+    start_urls = ["http://www.stw-on.de/braunschweig/essen/menus/mensa-1",
+                  "http://www.stw-on.de/braunschweig/essen/menus/360-2",
+                  "http://www.stw-on.de/braunschweig/essen/menus/mensa-2",
+                  "http://www.stw-on.de/braunschweig/essen/menus/mensa-hbk"]
 
     def parse(self, response):
         for table in response.xpath("//table"):
@@ -31,4 +34,4 @@ class MensaSpider(scrapy.Spider):
                     beil["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
                     
                     beil["price_e"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
-                    yield beil
+                    yield beil 
