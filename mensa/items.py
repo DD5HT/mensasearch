@@ -10,8 +10,6 @@ import scrapy
 
 class MensaItem(scrapy.Item):
     day = scrapy.Field()
-    kiday = scrapy.Field()
-    kind = scrapy.Field()
-    kind_meal = scrapy.Field()
-    price = scrpay.Field()
+    meal = scrapy.Field()
+    price = scrapy.Field()
 
