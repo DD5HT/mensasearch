@@ -6,5 +6,5 @@ http://scrapy.org/
 
 Install scrapy: http://doc.scrapy.org/en/latest/intro/install.html
 
-run in your mensasearch directory to create a json file:   
+Run this in your mensasearch directory to create a json file:   
 scrapy crawl mensa -o <name>.json 
