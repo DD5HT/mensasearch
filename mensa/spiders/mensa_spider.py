@@ -23,9 +23,9 @@ class MensaSpider(scrapy.Spider):
 
                     haupt["price_s"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
                     
-                    haupt["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
+                    haupt["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_g']/text()").extract()
                     
-                    haupt["price_e"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
+                    haupt["price_e"] = tr.xpath(".//td[@class='swbs_speiseplan_price_e']/text()").extract()
                     yield haupt
                 
                 for td in tr.xpath(".//td[@class='swbs_speiseplan_other']/text()"):
@@ -35,7 +35,7 @@ class MensaSpider(scrapy.Spider):
 
                     beil["price_s"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
                     
-                    beil["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
+                    beil["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_g']/text()").extract()
                     
-                    beil["price_e"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
+                    beil["price_e"] = tr.xpath(".//td[@class='swbs_speiseplan_price_e']/text()").extract()
                     yield beil 
