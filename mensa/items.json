@@ -34,3 +34,8 @@
 {"price": ["2,10 \u20ac"], "day": ["Freitag, 16. Januar 2015 \u2013 Mittagsmensa"], "meal": "Falafel Kichererbsenb\u00e4llchen mit Kr\u00e4uterkefir und Bulgur (V)"},
 {"price": ["1,40 \u20ac"], "day": ["Samstag, 17. Januar 2015 \u2013 Mittagsmensa"], "meal": "Bulgursalat (V)"},
 {"price": ["2,10 \u20ac"], "day": ["Samstag, 17. Januar 2015 \u2013 Mittagsmensa"], "meal": "H\u00e4hnchenschnitzel mit Bratenso\u00dfe (G)"}]
+[{"day": ["Montag, 12. Januar 2015 \u2013 Mittagsmensa"]},
+{"price_s": ["1,60 \u20ac"], "price_e": ["1,60 \u20ac"], "day": ["Montag, 12. Januar 2015 \u2013 Mittagsmensa"], "price_g": ["1,60 \u20ac"], "meal": "Linsensuppe mit W\u00fcrstchen (2,3) (S)"},
+{"price_s": ["2,10 \u20ac"], "price_e": ["2,10 \u20ac"], "day": ["Montag, 12. Januar 2015 \u2013 Mittagsmensa"], "price_g": ["2,10 \u20ac"], "meal": "H\u00fchnerbrust mit Tomatensauce (G)"},
+{"price_s": ["3,20 \u20ac"], "price_e": ["3,20 \u20ac"], "day": ["Montag, 12. Januar 2015 \u2013 Mittagsmensa"], "price_g": ["3,20 \u20ac"], "meal": "Rinderh\u00fcftsteak mit Kr\u00e4uterbutter  (R)"},
+{"price_s": ["3,20 \u20ac"], "price_e": ["3,20 \u20ac"], "day": ["Montag, 12. Januar 2015 \u2013 Mittagsmensa"], "price_g": ["3,20 \u20ac"], "meal": "Rinderh\u00fcftsteak mit Kr\u00e4uterbutter  (R)"}]
