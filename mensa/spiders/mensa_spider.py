@@ -19,6 +19,8 @@ class MensaSpider(scrapy.Spider):
                 for td in tr.xpath(".//td[@class='swbs_speiseplan_meal']/text()"):
                     haupt["meal"]  = td.extract()
                     
+                    haupt["kind_meal"] = tr.xpath(".//td/nobr/text()").extract()
+
                     haupt["price_s"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
                     
                     haupt["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
@@ -29,6 +31,8 @@ class MensaSpider(scrapy.Spider):
                 for td in tr.xpath(".//td[@class='swbs_speiseplan_other']/text()"):
                     beil["other"] = td.extract()
                     
+                    beil["kind"] = tr.xpath(".//td/nobr/text()").extract()
+
                     beil["price_s"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
                     
                     beil["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()

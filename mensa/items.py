@@ -12,6 +12,7 @@ import scrapy
 class Hauptgericht(scrapy.Item):
     day = scrapy.Field()
     meal = scrapy.Field()
+    kind_meal = scrapy.Field()
     price_s = scrapy.Field()
     price_e = scrapy.Field()
     price_g = scrapy.Field()
@@ -19,6 +20,7 @@ class Hauptgericht(scrapy.Item):
 class Beilage(scrapy.Item):
     day = scrapy.Field()
     other  = scrapy.Field()
+    kind = scrapy.Field()
     price_s = scrapy.Field()
     price_e = scrapy.Field()
     price_g = scrapy.Field()
