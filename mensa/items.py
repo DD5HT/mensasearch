@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#
+#-*- coding: utf-8 -*-
 
 # Define here the models for your scraped items
 #
@@ -8,8 +9,18 @@
 import scrapy
 
 
-class MensaItem(scrapy.Item):
+class Hauptgericht(scrapy.Item):
     day = scrapy.Field()
     meal = scrapy.Field()
-    price = scrapy.Field()
+    kind_meal = scrapy.Field()
+    price_s = scrapy.Field()
+    price_e = scrapy.Field()
+    price_g = scrapy.Field()
 
+class Beilage(scrapy.Item):
+    day = scrapy.Field()
+    other  = scrapy.Field()
+    kind = scrapy.Field()
+    price_s = scrapy.Field()
+    price_e = scrapy.Field()
+    price_g = scrapy.Field()
