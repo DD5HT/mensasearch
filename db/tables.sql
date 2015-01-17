@@ -1,9 +1,10 @@
 CREATE TABLE price
 (
     id INTEGER PRIMARY KEY ASC,
-    price_student DECIMAL(1,2) NOT NULL UNIQUE CHECK ( price_student > 0 ),
-    price_worker DECIMAL(1,2) NOT NULL UNIQUE CHECK ( price_worker > 0 ),
-    price_visitor DECIMAL(1,2) NOT NULL UNIQUE CHECK ( price_visitor > 0 )
+    price_student DECIMAL(1,2) NOT NULL CHECK ( price_student > 0 ),
+    price_worker DECIMAL(1,2) NOT NULL CHECK ( price_worker > 0 ),
+    price_visitor DECIMAL(1,2) NOT NULL CHECK ( price_visitor > 0 ),
+    UNIQUE(price_student, price_visitor, price_worker)
 );
 
 CREATE TABLE meal_type
@@ -37,28 +38,17 @@ CREATE TABLE mensa
     PRIMARY KEY(name, city)
 );
 
-CREATE TABLE meal_mensa
+CREATE TABLE available
 (
     meal VARCHAR(64) NOT NULL,
     mensa VARCHAR(64) NOT NULL,
-    city VARCHAR(64) NOT NULL, 
-    FOREIGN KEY(meal) REFERENCES meal(name)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    FOREIGN KEY(mensa, city) REFERENCES mensa(name, city)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    PRIMARY KEY(meal, mensa, city)
-);
-
-CREATE TABLE available
-(
-    meal INTEGER NOT NULL,
-    mensa INTEGER NOT NULL,
     price INTEGER NOT NULL,
     city VARCHAR(64) NOT NULL, 
     avail_time DATETIME NOT NULL,
-    FOREIGN KEY(meal, mensa, city) REFERENCES meal_mensa(meal, mensa, city)
+    FOREIGN KEY(meal) REFERENCES meal(name)
+        ON UPDATE CASCADE,
+    FOREIGN KEY(mensa, city) REFERENCES mensa(name, city)
+        ON UPDATE CASCADE,
     FOREIGN KEY(price) REFERENCES price(id),
     PRIMARY KEY(meal, mensa, city, avail_time)
 );
