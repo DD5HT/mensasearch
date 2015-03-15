@@ -1,54 +1,62 @@
-CREATE TABLE price
-(
-    id INTEGER PRIMARY KEY ASC,
-    price_student DECIMAL(1,2) NOT NULL CHECK ( price_student > 0 ),
-    price_worker DECIMAL(1,2) NOT NULL CHECK ( price_worker > 0 ),
-    price_visitor DECIMAL(1,2) NOT NULL CHECK ( price_visitor > 0 ),
-    UNIQUE(price_student, price_visitor, price_worker)
+CREATE TABLE type (
+    name TEXT NOT NULL PRIMARY KEY
 );
 
-CREATE TABLE meal_type
-(
-    name VARCHAR(64) PRIMARY KEY
+CREATE TABLE meal (
+    id INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    type TEXT NOT NULL,
+    FOREIGN KEY (type) REFERENCES type(name),
+    PRIMARY KEY (id, type)
 );
 
-CREATE TABLE city
-(
-    name VARCHAR(64) PRIMARY KEY
+CREATE TABLE mensa (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    location_lo REAL NOT NULL DEFAULT 0.0,
+    location_la REAL NOT NULL DEFAULT 0.0
 );
 
-CREATE TABLE meal
-(
-    name VARCHAR(64) PRIMARY KEY,
-    mtype VARCHAR(64) NOT NULL,
-    FOREIGN KEY(mtype) REFERENCES meal_type(name)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+CREATE TABLE food_lable (
+    name TEXT NOT NULL PRIMARY KEY,
+    icon BLOB
 );
 
-CREATE TABLE mensa
-(
-    name VARCHAR(64) NOT NULL,
-    city VARCHAR(64) NOT NULL,
-    location_latitude REAL,
-    location_longitude REAL,
-    FOREIGN KEY(city) REFERENCES city(name)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    PRIMARY KEY(name, city)
+CREATE TABLE allergy_lable (
+    lable TEXT NOT NULL PRIMARY KEY,
+    description TEXT NOT NULL
 );
 
-CREATE TABLE available
-(
-    meal VARCHAR(64) NOT NULL,
-    mensa VARCHAR(64) NOT NULL,
-    price INTEGER NOT NULL,
-    city VARCHAR(64) NOT NULL, 
-    avail_time DATETIME NOT NULL,
-    FOREIGN KEY(meal) REFERENCES meal(name)
-        ON UPDATE CASCADE,
-    FOREIGN KEY(mensa, city) REFERENCES mensa(name, city)
-        ON UPDATE CASCADE,
-    FOREIGN KEY(price) REFERENCES price(id),
-    PRIMARY KEY(meal, mensa, city, avail_time)
+CREATE TABLE ingredient_lable (
+    lable INTEGER NOT NULL,
+    description TEXT NOT NULL
+);
+
+CREATE TABLE meal_contains_ingredient (
+    meal INTEGER NOT NULL,
+    ingredient INTEGER NOT NULL,
+    FOREIGN KEY (meal) REFERENCES meal(id),
+    FOREIGN KEY (ingredient) REFERENCES ingredient(lable),
+    PRIMARY KEY (meal, ingredient)
+);
+
+CREATE TABLE meal_has_lable (
+    meal INTEGER NOT NULL,
+    lable INTEGER NOT NULL,
+    since TEXT DEFAULT CURRENT_TIME,
+    FOREIGN KEY (meal) REFERENCES meal(id),
+    FOREIGN KEY (lable) REFERENCES food_lable(lable),
+    PRIMARY KEY (meal, lable)
+);
+
+CREATE TABLE mensa_has_meal (
+    meal INTEGER NOT NULL,
+    mensa INTEGER NOT NULL,
+    available TEXT DEFAULT CURRENT_TIME,
+    price_student INTEGER NOT NULL,
+    price_worker INTEGER NOT NULL,
+    price_visitor INTEGER NOT NULL,
+    FOREIGN KEY (meal) REFERENCES meal(id),
+    FOREIGN KEY (mensa) REFERENCES mensa(id),
+    PRIMARY KEY (mensa, meal, available)
 );
