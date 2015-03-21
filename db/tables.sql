@@ -1,13 +1,13 @@
-CREATE TABLE type (
+CREATE TABLE kind (
     name TEXT NOT NULL PRIMARY KEY
 );
 
 CREATE TABLE meal (
     id INTEGER NOT NULL,
     description TEXT NOT NULL,
-    type TEXT NOT NULL,
-    FOREIGN KEY (type) REFERENCES type(name),
-    PRIMARY KEY (id, type)
+    kind TEXT NOT NULL,
+    FOREIGN KEY (kind) REFERENCES kind(name),
+    PRIMARY KEY (id, kind)
 );
 
 CREATE TABLE mensa (
@@ -54,8 +54,8 @@ CREATE TABLE mensa_has_meal (
     mensa INTEGER NOT NULL,
     available TEXT DEFAULT CURRENT_TIME,
     price_student INTEGER NOT NULL,
-    price_worker INTEGER NOT NULL,
-    price_visitor INTEGER NOT NULL,
+    price_employe INTEGER NOT NULL,
+    price_guest INTEGER NOT NULL,
     FOREIGN KEY (meal) REFERENCES meal(id),
     FOREIGN KEY (mensa) REFERENCES mensa(id),
     PRIMARY KEY (mensa, meal, available)
