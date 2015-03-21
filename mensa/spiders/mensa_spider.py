@@ -6,7 +6,7 @@ class MensaSpider(CrawlSpider):
     name = 'mensa'
     allowed_domains = ['stw-on.de']
     start_urls = ['http://www.stw-on.de/speiseplane']
-    rules = [Rule(LinkExtractor(allow=['http://www.stw-on.de/braunschweig/essen/menus/*']), 'parse_plan')]
+    rules = [Rule(LinkExtractor(allow=['essen/menus/*']), 'parse_plan')]
 
     def parse_plan(self, response):
         mensa = response.url.split("/")[-1]
