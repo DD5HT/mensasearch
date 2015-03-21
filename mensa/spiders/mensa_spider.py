@@ -1,41 +1,29 @@
-import scrapy
-from  mensa.items import Hauptgericht, Beilage 
-class MensaSpider(scrapy.Spider):
-    name = "mensa"
-    allowed_domains = ["stw-on.de"]
-    start_urls = ["http://www.stw-on.de/braunschweig/essen/menus/mensa-1",
-                  "http://www.stw-on.de/braunschweig/essen/menus/360-2",
-                  "http://www.stw-on.de/braunschweig/essen/menus/mensa-2",
-                  "http://www.stw-on.de/braunschweig/essen/menus/mensa-hbk"]
+from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.contrib.linkextractors import LinkExtractor
+from  mensa.items import MealEntry
 
-    def parse(self, response):
-        for table in response.xpath("//table"):
-            haupt = Hauptgericht()
-            beil = Beilage()
-            haupt ["day"] = table.xpath("./tr/th[@colspan='2']/text()").extract()
-            beil ["day"] = haupt["day"]
-            for tr in table.xpath(".//tr"): 
-                
-                for td in tr.xpath(".//td[@class='swbs_speiseplan_meal']/text()"):
-                    haupt["meal"]  = td.extract()
-                    
-                    haupt["kind_meal"] = tr.xpath(".//td/nobr/text()").extract()
+class MensaSpider(CrawlSpider):
+    name = 'mensa'
+    allowed_domains = ['stw-on.de']
+    start_urls = ['http://www.stw-on.de/speiseplane']
+    rules = [Rule(LinkExtractor(allow=['essen/menus/*']), 'parse_plan')]
 
-                    haupt["price_s"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
-                    
-                    haupt["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_g']/text()").extract()
-                    
-                    haupt["price_e"] = tr.xpath(".//td[@class='swbs_speiseplan_price_e']/text()").extract()
-                    yield haupt
-                
-                for td in tr.xpath(".//td[@class='swbs_speiseplan_other']/text()"):
-                    beil["other"] = td.extract()
-                    
-                    beil["kind"] = tr.xpath(".//td/nobr/text()").extract()
+    def parse_plan(self, response):
+        mensa = response.url.split("/")[-1]
+        tables = response.xpath(".//table[@class='swbs_speiseplan']")
+        for table in tables:
+            date = table.xpath(".//th[@colspan='3']/text()").extract()
+            for tr in table.xpath(".//tr"):
+                meal = MealEntry()
+                meal["mensa"] = [mensa]
+                meal["date"] = date
+                meal["kind"] = tr.xpath(".//td[@class='swbs_speiseplan_kind_meal']/nobr/text()").extract()
+                meal["description"] = tr.xpath("((.//td[@class='swbs_speiseplan_other'])/text())[1]").extract()
+                meal["price_student"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
+                meal["price_employe"] = tr.xpath(".//td[@class='swbs_speiseplan_price_e']/text()").extract()
+                meal["price_guest"] = tr.xpath(".//td[@class='swbs_speiseplan_price_g']/text()").extract()
 
-                    beil["price_s"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
-                    
-                    beil["price_g"] = tr.xpath(".//td[@class='swbs_speiseplan_price_g']/text()").extract()
-                    
-                    beil["price_e"] = tr.xpath(".//td[@class='swbs_speiseplan_price_e']/text()").extract()
-                    yield beil 
+                if not meal["description"]:
+                    continue
+                else:
+                    yield meal

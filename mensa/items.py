@@ -9,18 +9,12 @@
 import scrapy
 
 
-class Hauptgericht(scrapy.Item):
-    day = scrapy.Field()
-    meal = scrapy.Field()
-    kind_meal = scrapy.Field()
-    price_s = scrapy.Field()
-    price_e = scrapy.Field()
-    price_g = scrapy.Field()
-
-class Beilage(scrapy.Item):
-    day = scrapy.Field()
-    other  = scrapy.Field()
+class MealEntry(scrapy.Item):
+    mensa = scrapy.Field()
     kind = scrapy.Field()
-    price_s = scrapy.Field()
-    price_e = scrapy.Field()
-    price_g = scrapy.Field()
+    description = scrapy.Field()
+    price_student = scrapy.Field()
+    price_employe = scrapy.Field()
+    price_guest = scrapy.Field()
+    food_lables = scrapy.Field()
+    date = scrapy.Field()
