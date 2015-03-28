@@ -13,5 +13,9 @@ BOT_NAME = 'mensa'
 SPIDER_MODULES = ['mensa.spiders']
 NEWSPIDER_MODULE = 'mensa.spiders'
 
+ITEM_PIPELINES = {
+        'mensa.save_to_db.MensaPipeline': 900,
+}
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'mensa (+http://www.yourdomain.com)'
