@@ -20,10 +20,10 @@ class MensaSpider(CrawlSpider):
                 meal["kind"] = tr.xpath(".//td[@class='swbs_speiseplan_kind_meal']/nobr/text()").extract()
                 meal["description"] = tr.xpath("((.//td[@class='swbs_speiseplan_other'])/text())[1]").extract()
                 meal["price_student"] = tr.xpath(".//td[@class='swbs_speiseplan_price_s']/text()").extract()
-                meal["price_employe"] = tr.xpath(".//td[@class='swbs_speiseplan_price_e']/text()").extract()
+                meal["price_employee"] = tr.xpath(".//td[@class='swbs_speiseplan_price_e']/text()").extract()
                 meal["price_guest"] = tr.xpath(".//td[@class='swbs_speiseplan_price_g']/text()").extract()
-
-                if not meal["description"]:
-                    continue
-                else:
-                    yield meal
+                meal["food_lables"] = tr.xpath(".//td[@class='swbs_speiseplan_other']/nobr/img/@title").extract() # lables
+                meal["allergenes"] = tr.xpath(".//img[@src='http://www.stw-on.de/media/hg-icon/A.16.png']/@title").extract() # allergenes
+                meal["additives"] = tr.xpath(".//img[@src='http://www.stw-on.de/media/hg-icon/Z.16.png']/@title").extract()
+                meal["special"] = tr.xpath(".//img[@src='http://www.stw-on.de/media/hg-icon/S.16.png']/@title").extract() #special
+                yield meal
