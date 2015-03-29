@@ -2,7 +2,7 @@
 
 from scrapy.exceptions import DropItem
 import sqlite3
-from items import MealEntry
+from items import MealEntry, LableEntry
 
 def date_generator(date_string):
     date_fields = date_string.split(" ")
@@ -47,7 +47,7 @@ def lable_insert(sqlcursor, meal, lables):
         sqlcursor.execute("INSERT OR IGNORE INTO lable (name) VALUES (?)", (l, ))
     sqlcursor.executemany("INSERT OR IGNORE INTO meal_has_lable (meal,lable) VALUES (?,?)", meal_lable_generator(meal, lables))
 
-class MensaPipeline(object):
+class MealPipeline(object):
 
     def __init__(self):
         self.conn = sqlite3.connect("./mensa.sqlite")
@@ -97,24 +97,28 @@ class MensaPipeline(object):
         self.conn.close()
 
     def process_item(self, meal, spider):
+        if not "meal" in getattr(spider, 'pipelines', []):
+            return meal
+
         if not (meal["description"] and meal["kind"] and meal["date"] and meal["mensa"]):
             raise DropItem("Not a valid item. ")
         else:
             try:
+                description = meal["description"][0].rstrip()
                 self.c.execute("INSERT OR IGNORE INTO kind (name) VALUES (?)", (meal["kind"][0], ))
-                self.c.execute("INSERT OR IGNORE INTO meal (description, kind) VALUES (?,?)", (meal["description"][0], meal["kind"][0]))
+                self.c.execute("INSERT OR IGNORE INTO meal (description, kind) VALUES (?,?)", (description, meal["kind"][0]))
                 self.c.execute("INSERT OR IGNORE INTO mensa (name) VALUES (?)", (meal["mensa"][0], ))
                 if meal["food_lables"]:
-                    lable_insert(self.c, meal["description"][0], meal["food_lables"])
+                    lable_insert(self.c, description, meal["food_lables"])
 
                 if meal["special"]:
-                    lable_insert(self.c, meal["description"][0], meal["special"][0].split(", "))
+                    lable_insert(self.c, description, meal["special"][0].split(", "))
                 if meal["allergenes"]:
-                    lable_insert(self.c, meal["description"][0], meal["allergenes"][0][11:].split(", "))
+                    lable_insert(self.c, description, meal["allergenes"][0][11:].split(", "))
                 if meal["additives"]:
-                    lable_insert(self.c, meal["description"][0], meal["additives"][0][14:].split(", "))
+                    lable_insert(self.c, description, meal["additives"][0][14:].split(", "))
 
-                self.c.execute("INSERT OR IGNORE INTO mensa_has_meal (meal,mensa,avail_date,price_student,price_employee,price_guest,avail_time) VALUES (?,?,?,?,?,?,?)", (meal["description"][0], meal["mensa"][0], date_generator(meal["date"][0]), meal["price_student"][0][:4], meal["price_employee"][0][:4], meal["price_guest"][0][:4],meal["date"][0][-12:]))
+                self.c.execute("INSERT OR IGNORE INTO mensa_has_meal (meal,mensa,avail_date,price_student,price_employee,price_guest,avail_time) VALUES (?,?,?,?,?,?,?)", (description, meal["mensa"][0], date_generator(meal["date"][0]), meal["price_student"][0][:4], meal["price_employee"][0][:4], meal["price_guest"][0][:4],meal["date"][0][-12:]))
 
                 self.conn.commit()
 
@@ -122,3 +126,37 @@ class MensaPipeline(object):
                 print("---- SQL ---- ", e.args[0], meal)
 
             return meal
+
+
+
+class LablePipeline(object):
+
+    def __init__(self):
+        self.conn = sqlite3.connect("./mensa.sqlite")
+        self.c = self.conn.cursor()
+        self.c.executescript("""
+        CREATE TABLE IF NOT EXISTS lable (
+            name TEXT NOT NULL PRIMARY KEY,
+            description TEXT
+        );
+        """)
+
+    def spider_closed(self,spider,reason):
+        self.conn.commit()
+        self.conn.close()
+
+    def process_item(self, item, spider):
+
+        if not "lable" in getattr(spider, 'pipelines', []):
+            return item
+
+        if not (item["lable"] and item["description"]):
+            raise DropItem("Not a valid item.")
+        else:
+            try:
+                self.c.execute("INSERT OR REPLACE INTO lable (name, description) VALUES (?, ?)", (item["lable"][0], item["description"][0]))
+                self.conn.commit()
+            except sqlite3.Error as e:
+                print("---- SQL ---- ", e.args[0], item)
+
+            return item
