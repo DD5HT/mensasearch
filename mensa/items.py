@@ -19,5 +19,3 @@ class MealEntry(scrapy.Item):
 class LableEntry(scrapy.Item):
     lable = scrapy.Field()
     description = scrapy.Field()
-
-
