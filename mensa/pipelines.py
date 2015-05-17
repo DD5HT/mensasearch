@@ -127,8 +127,6 @@ class MealPipeline(object):
 
             return meal
 
-
-
 class LablePipeline(object):
 
     def __init__(self):
